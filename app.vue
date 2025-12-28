@@ -8,6 +8,8 @@
 
     <AppFooter />
 
-    <AppWhatsAppButton />
+    <ClientOnly>
+      <AppWhatsAppButton />
+    </ClientOnly>
   </div>
 </template>
