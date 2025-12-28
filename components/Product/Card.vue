@@ -13,34 +13,37 @@ defineProps<{
     :to="`/producto/${product.code}`"
     class="group block"
   >
-    <!-- Image -->
-    <div class="aspect-square bg-secondary-50 rounded-xl overflow-hidden">
-      <img
-        v-if="product.imageUrl"
-        :src="product.imageUrl"
-        :alt="product.name"
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        loading="lazy"
-      >
-      <div
-        v-else
-        class="w-full h-full flex items-center justify-center text-secondary-200"
-      >
-        <Sparkles class="w-12 h-12" />
+    <!-- Card container -->
+    <div class="card card-hover overflow-hidden">
+      <!-- Image -->
+      <div class="aspect-square bg-cream-100 overflow-hidden">
+        <img
+          v-if="product.imageUrl"
+          :src="product.imageUrl"
+          :alt="product.name"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        >
+        <div
+          v-else
+          class="w-full h-full flex items-center justify-center text-cream-400"
+        >
+          <Sparkles class="w-12 h-12" />
+        </div>
       </div>
-    </div>
 
-    <!-- Info -->
-    <div class="mt-3 space-y-1">
-      <h3 class="font-medium text-secondary-800 group-hover:text-primary-600 transition-colors line-clamp-2">
-        {{ product.name }}
-      </h3>
-      <p class="text-sm text-secondary-500">
-        {{ product.code }}
-      </p>
-      <p class="text-primary-600 font-semibold">
-        {{ formatPrice(product.priceRetail) }}
-      </p>
+      <!-- Info -->
+      <div class="p-4">
+        <h3 class="font-medium text-warm-800 group-hover:text-gold-600 transition-colors duration-300 line-clamp-2 mb-1">
+          {{ product.name }}
+        </h3>
+        <p class="text-xs text-warm-400 mb-2">
+          Ref: {{ product.code }}
+        </p>
+        <p class="text-price text-lg">
+          {{ formatPrice(product.priceRetail) }}
+        </p>
+      </div>
     </div>
   </NuxtLink>
 </template>

@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   Sparkles,
   Check,
+  Truck,
 } from 'lucide-vue-next'
 import { formatPrice, getCategoryFromCode, categoryLabels } from '~/types'
 import type { Product } from '~/types'
@@ -92,21 +93,21 @@ function shareWhatsApp() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white">
+  <div class="min-h-screen">
     <div class="container-app py-6 md:py-10">
       <!-- Back link -->
       <NuxtLink
         to="/catalogo"
-        class="inline-flex items-center gap-2 text-secondary-600 hover:text-primary-600 mb-6 transition-colors"
+        class="inline-flex items-center gap-2 text-warm-500 hover:text-gold-600 mb-8 transition-colors duration-300"
       >
         <ArrowLeft class="w-4 h-4" />
         Volver al catálogo
       </NuxtLink>
 
       <!-- Product detail -->
-      <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+      <div class="grid md:grid-cols-2 gap-8 lg:gap-16">
         <!-- Image -->
-        <div class="aspect-square bg-secondary-50 rounded-2xl overflow-hidden">
+        <div class="aspect-square bg-cream-100 rounded-2xl overflow-hidden shadow-soft">
           <img
             v-if="product?.imageUrl"
             :src="product.imageUrl"
@@ -115,7 +116,7 @@ function shareWhatsApp() {
           >
           <div
             v-else
-            class="w-full h-full flex items-center justify-center text-secondary-200"
+            class="w-full h-full flex items-center justify-center text-cream-300"
           >
             <Sparkles class="w-24 h-24" />
           </div>
@@ -126,29 +127,29 @@ function shareWhatsApp() {
           <!-- Category badge -->
           <span
             v-if="categoryLabel"
-            class="inline-block self-start px-3 py-1 bg-primary-50 text-primary-700 text-sm font-medium rounded-full mb-4"
+            class="inline-block self-start px-4 py-1.5 bg-gold-100 text-gold-700 text-sm font-medium rounded-full mb-4"
           >
             {{ categoryLabel }}
           </span>
 
           <!-- Name -->
-          <h1 class="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold text-secondary-900">
+          <h1 class="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold text-warm-800">
             {{ product?.name }}
           </h1>
 
           <!-- Code -->
-          <p class="mt-2 text-secondary-500">
+          <p class="mt-2 text-warm-400 text-sm">
             Ref: {{ product?.code }}
           </p>
 
           <!-- Price -->
-          <p class="mt-4 text-3xl font-semibold text-primary-600">
+          <p class="mt-6 text-3xl md:text-4xl font-semibold text-gold-500">
             {{ formatPrice(product?.priceRetail || 0) }}
           </p>
 
           <!-- WhatsApp CTA -->
           <button
-            class="mt-8 btn-whatsapp text-lg"
+            class="mt-8 btn-whatsapp text-lg py-4"
             @click="askAboutProduct(product!)"
           >
             <MessageCircle class="w-6 h-6" />
@@ -156,15 +157,15 @@ function shareWhatsApp() {
           </button>
 
           <!-- Share buttons -->
-          <div class="mt-6 pt-6 border-t border-secondary-100">
-            <p class="text-sm font-medium text-secondary-700 mb-3 flex items-center gap-2">
+          <div class="mt-8 pt-8 border-t border-cream-200">
+            <p class="text-sm font-medium text-warm-600 mb-4 flex items-center gap-2">
               <Share2 class="w-4 h-4" />
               Compartir
             </p>
             <div class="flex gap-3">
               <!-- WhatsApp share -->
               <button
-                class="flex items-center gap-2 px-4 py-2 bg-[#25D366]/10 text-[#25D366] rounded-lg hover:bg-[#25D366]/20 transition-colors text-sm font-medium"
+                class="flex items-center gap-2 px-5 py-2.5 bg-[#25D366]/10 text-[#25D366] rounded-full hover:bg-[#25D366]/20 transition-all duration-300 text-sm font-medium"
                 @click="shareWhatsApp"
               >
                 <MessageCircle class="w-4 h-4" />
@@ -173,33 +174,43 @@ function shareWhatsApp() {
 
               <!-- Copy link -->
               <button
-                class="flex items-center gap-2 px-4 py-2 bg-secondary-100 text-secondary-700 rounded-lg hover:bg-secondary-200 transition-colors text-sm font-medium"
+                class="flex items-center gap-2 px-5 py-2.5 bg-cream-200 text-warm-600 rounded-full hover:bg-cream-300 transition-all duration-300 text-sm font-medium"
                 @click="copyLink"
               >
-                <Check v-if="copied" class="w-4 h-4 text-green-600" />
+                <Check v-if="copied" class="w-4 h-4 text-sage-500" />
                 <Link2 v-else class="w-4 h-4" />
                 {{ copied ? 'Copiado' : 'Copiar enlace' }}
               </button>
             </div>
           </div>
 
-          <!-- Additional info -->
+          <!-- Shipping info -->
           <div class="mt-auto pt-8">
-            <div class="p-4 bg-secondary-50 rounded-xl">
-              <p class="text-sm text-secondary-600">
-                <strong class="text-secondary-800">Envío a toda España.</strong>
-                Contacta con nosotros para más información sobre disponibilidad y tiempos de entrega.
-              </p>
+            <div class="p-5 bg-cream-100 rounded-xl border border-cream-200">
+              <div class="flex items-start gap-3">
+                <Truck class="w-5 h-5 text-gold-500 mt-0.5" />
+                <div>
+                  <p class="font-medium text-warm-800">
+                    Envío a toda España
+                  </p>
+                  <p class="text-sm text-warm-500 mt-1">
+                    Contacta con nosotros para más información sobre disponibilidad y tiempos de entrega.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Related products -->
-      <section v-if="relatedProducts?.length" class="mt-16 md:mt-24">
-        <h2 class="text-2xl md:text-3xl font-serif font-semibold text-secondary-900 mb-8">
-          También te puede gustar
-        </h2>
+      <section v-if="relatedProducts?.length" class="mt-20 md:mt-28">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl md:text-3xl font-serif font-semibold text-warm-800">
+            También te puede gustar
+          </h2>
+          <div class="divider-gold mx-auto mt-4" />
+        </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           <ProductCard
             v-for="related in relatedProducts"

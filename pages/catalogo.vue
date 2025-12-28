@@ -76,14 +76,15 @@ const hasActiveFilters = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white">
+  <div class="min-h-screen">
     <!-- Header -->
-    <div class="bg-secondary-50 border-b border-secondary-100">
-      <div class="container-app py-8 md:py-12">
-        <h1 class="text-3xl md:text-4xl font-serif font-semibold text-secondary-900">
+    <div class="bg-gradient-to-r from-cream-100 to-rose-50 border-b border-cream-200">
+      <div class="container-app py-10 md:py-14">
+        <h1 class="text-3xl md:text-4xl font-serif font-semibold text-warm-800">
           Catálogo
         </h1>
-        <p class="mt-2 text-secondary-600">
+        <div class="divider-gold mt-4" />
+        <p class="mt-4 text-warm-500">
           Descubre todas nuestras piezas únicas
         </p>
       </div>
@@ -94,17 +95,17 @@ const hasActiveFilters = computed(() => {
       <div class="flex flex-col md:flex-row md:items-center gap-4 mb-8">
         <!-- Search -->
         <div class="relative flex-1 max-w-md">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary-400" />
+          <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-warm-400" />
           <input
             v-model="searchInput"
             type="text"
             placeholder="Buscar productos..."
-            class="w-full pl-10 pr-10 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            class="w-full pl-12 pr-10 py-3 bg-white border border-cream-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500 transition-all duration-300"
             @input="handleSearch"
           >
           <button
             v-if="searchInput"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-400 hover:text-secondary-600"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-warm-400 hover:text-warm-600 transition-colors"
             @click="clearSearch"
           >
             <X class="w-5 h-5" />
@@ -113,7 +114,7 @@ const hasActiveFilters = computed(() => {
 
         <!-- Mobile filter toggle -->
         <button
-          class="md:hidden flex items-center gap-2 px-4 py-2.5 border border-secondary-200 rounded-lg text-secondary-600"
+          class="md:hidden flex items-center justify-center gap-2 px-4 py-3 bg-white border border-cream-300 rounded-xl text-warm-600 hover:border-gold-500 transition-colors"
           @click="showFilters = !showFilters"
         >
           <SlidersHorizontal class="w-5 h-5" />
@@ -125,7 +126,7 @@ const hasActiveFilters = computed(() => {
           <!-- Category -->
           <select
             v-model="filters.category"
-            class="px-4 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+            class="px-4 py-3 bg-white border border-cream-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500 transition-all duration-300 cursor-pointer"
           >
             <option
               v-for="cat in categories"
@@ -139,7 +140,7 @@ const hasActiveFilters = computed(() => {
           <!-- Sort -->
           <select
             v-model="filters.sortBy"
-            class="px-4 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+            class="px-4 py-3 bg-white border border-cream-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500 transition-all duration-300 cursor-pointer"
           >
             <option
               v-for="opt in sortOptions"
@@ -153,7 +154,7 @@ const hasActiveFilters = computed(() => {
           <!-- Clear filters -->
           <button
             v-if="hasActiveFilters"
-            class="text-sm text-primary-600 hover:text-primary-700 font-medium"
+            class="text-sm text-gold-600 hover:text-gold-700 font-medium transition-colors"
             @click="clearFilters"
           >
             Limpiar filtros
@@ -172,16 +173,16 @@ const hasActiveFilters = computed(() => {
       >
         <div
           v-if="showFilters"
-          class="md:hidden mb-6 p-4 bg-secondary-50 rounded-xl space-y-4"
+          class="md:hidden mb-6 p-5 bg-white rounded-2xl border border-cream-200 shadow-soft space-y-4"
         >
           <!-- Category -->
           <div>
-            <label class="block text-sm font-medium text-secondary-700 mb-2">
+            <label class="block text-sm font-medium text-warm-700 mb-2">
               Categoría
             </label>
             <select
               v-model="filters.category"
-              class="w-full px-4 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+              class="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
             >
               <option
                 v-for="cat in categories"
@@ -195,12 +196,12 @@ const hasActiveFilters = computed(() => {
 
           <!-- Sort -->
           <div>
-            <label class="block text-sm font-medium text-secondary-700 mb-2">
+            <label class="block text-sm font-medium text-warm-700 mb-2">
               Ordenar por
             </label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-4 py-2.5 border border-secondary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+              class="w-full px-4 py-3 bg-cream-50 border border-cream-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
             >
               <option
                 v-for="opt in sortOptions"
@@ -215,7 +216,7 @@ const hasActiveFilters = computed(() => {
           <!-- Clear -->
           <button
             v-if="hasActiveFilters"
-            class="w-full py-2.5 text-sm text-primary-600 hover:text-primary-700 font-medium"
+            class="w-full py-3 text-sm text-gold-600 hover:text-gold-700 font-medium transition-colors"
             @click="clearFilters"
           >
             Limpiar filtros
@@ -224,7 +225,7 @@ const hasActiveFilters = computed(() => {
       </Transition>
 
       <!-- Results count -->
-      <p v-if="products?.length" class="text-sm text-secondary-500 mb-6">
+      <p v-if="products?.length" class="text-sm text-warm-500 mb-6">
         {{ products.length }} producto{{ products.length !== 1 ? 's' : '' }}
       </p>
 

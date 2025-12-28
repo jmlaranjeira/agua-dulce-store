@@ -2,6 +2,7 @@
 import { Menu, X } from 'lucide-vue-next'
 
 const isMenuOpen = ref(false)
+const isScrolled = ref(false)
 
 const navLinks = [
   { name: 'Inicio', href: '/' },
@@ -15,15 +16,27 @@ function toggleMenu() {
 function closeMenu() {
   isMenuOpen.value = false
 }
+
+// Detect scroll for shadow
+onMounted(() => {
+  const handleScroll = () => {
+    isScrolled.value = window.scrollY > 10
+  }
+  window.addEventListener('scroll', handleScroll)
+  onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+})
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-secondary-100">
+  <header
+    class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b transition-all duration-300"
+    :class="isScrolled ? 'border-cream-200 shadow-soft' : 'border-transparent'"
+  >
     <div class="container-app">
       <div class="flex items-center justify-between h-16 md:h-20">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center gap-2" @click="closeMenu">
-          <span class="font-serif text-xl md:text-2xl font-semibold text-primary-700">
+          <span class="font-serif text-2xl md:text-3xl font-semibold text-warm-800 tracking-tight">
             Agua Dulce
           </span>
         </NuxtLink>
@@ -34,7 +47,7 @@ function closeMenu() {
             v-for="link in navLinks"
             :key="link.href"
             :to="link.href"
-            class="text-secondary-600 hover:text-primary-600 font-medium transition-colors"
+            class="text-warm-600 hover:text-gold-500 font-medium transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-gold-500 after:transition-all after:duration-300 hover:after:w-full"
           >
             {{ link.name }}
           </NuxtLink>
@@ -42,7 +55,7 @@ function closeMenu() {
 
         <!-- Mobile Menu Button -->
         <button
-          class="md:hidden p-2 text-secondary-600 hover:text-primary-600"
+          class="md:hidden p-2 text-warm-600 hover:text-gold-500 transition-colors"
           aria-label="Menú"
           @click="toggleMenu"
         >
@@ -60,13 +73,13 @@ function closeMenu() {
         leave-from-class="opacity-100 translate-y-0"
         leave-to-class="opacity-0 -translate-y-2"
       >
-        <nav v-if="isMenuOpen" class="md:hidden py-4 border-t border-secondary-100">
-          <div class="flex flex-col gap-2">
+        <nav v-if="isMenuOpen" class="md:hidden py-4 border-t border-cream-200">
+          <div class="flex flex-col gap-1">
             <NuxtLink
               v-for="link in navLinks"
               :key="link.href"
               :to="link.href"
-              class="px-4 py-3 text-secondary-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors"
+              class="px-4 py-3 text-warm-600 hover:text-gold-500 hover:bg-cream-100 rounded-lg font-medium transition-all duration-300"
               @click="closeMenu"
             >
               {{ link.name }}

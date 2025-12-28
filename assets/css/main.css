@@ -10,36 +10,63 @@
   }
 
   body {
-    @apply font-sans text-secondary-900 antialiased;
+    @apply font-sans text-warm-800 antialiased bg-cream-100;
   }
 
   h1, h2, h3 {
-    @apply font-serif;
+    @apply font-serif text-warm-800;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg transition-all duration-300;
   }
 
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+    @apply btn bg-gold-500 text-white hover:bg-gold-400 active:bg-gold-600 shadow-sm hover:shadow-md;
   }
 
   .btn-secondary {
-    @apply btn bg-secondary-100 text-secondary-800 hover:bg-secondary-200 active:bg-secondary-300;
+    @apply btn bg-cream-200 text-warm-700 hover:bg-cream-300 active:bg-cream-400;
   }
 
   .btn-outline {
-    @apply btn border-2 border-primary-600 text-primary-600 hover:bg-primary-50;
+    @apply btn border-2 border-gold-500 text-gold-600 hover:bg-gold-50 hover:border-gold-400;
   }
 
   .btn-whatsapp {
-    @apply btn bg-[#25D366] text-white hover:bg-[#20bd5a] active:bg-[#1da851];
+    @apply btn bg-[#25D366] text-white hover:bg-[#20bd5a] active:bg-[#1da851] rounded-full;
   }
 
   .container-app {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-xl shadow-card transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply hover:shadow-card-hover hover:-translate-y-1;
+  }
+
+  /* Text styles */
+  .text-price {
+    @apply text-gold-500 font-semibold;
+  }
+
+  .text-muted {
+    @apply text-warm-500;
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-t border-cream-300;
+  }
+
+  .divider-gold {
+    @apply border-t-2 border-gold-200 w-16;
   }
 }
