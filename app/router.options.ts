@@ -7,7 +7,11 @@ export default <RouterConfig>{
       return savedPosition
     }
 
-    // Para navegación normal, ir al top
-    return { top: 0, behavior: 'smooth' }
+    // Esperar a que la página esté lista antes de hacer scroll
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ top: 0, left: 0, behavior: 'smooth' })
+      }, 100)
+    })
   },
 }
