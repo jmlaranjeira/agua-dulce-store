@@ -53,15 +53,23 @@ onMounted(() => {
           </NuxtLink>
         </nav>
 
-        <!-- Mobile Menu Button -->
-        <button
-          class="md:hidden p-2 text-warm-600 hover:text-gold-500 transition-colors"
-          aria-label="Menú"
-          @click="toggleMenu"
-        >
-          <Menu v-if="!isMenuOpen" class="w-6 h-6" />
-          <X v-else class="w-6 h-6" />
-        </button>
+        <!-- Desktop Cart Button -->
+        <div class="hidden md:block">
+          <CartButton />
+        </div>
+
+        <!-- Mobile: Cart + Menu Button -->
+        <div class="flex items-center md:hidden">
+          <CartButton />
+          <button
+            class="p-2 text-warm-600 hover:text-gold-500 transition-colors"
+            aria-label="Menú"
+            @click="toggleMenu"
+          >
+            <Menu v-if="!isMenuOpen" class="w-6 h-6" />
+            <X v-else class="w-6 h-6" />
+          </button>
+        </div>
       </div>
 
       <!-- Mobile Navigation -->

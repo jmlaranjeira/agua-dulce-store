@@ -7,6 +7,7 @@ import {
   Sparkles,
   Check,
   Truck,
+  ShoppingBag,
 } from 'lucide-vue-next'
 import { formatPrice, getCategoryFromCode, categoryLabels } from '~/types'
 import type { Product } from '~/types'
@@ -15,6 +16,7 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const { getProduct, getProducts } = useProducts()
 const { askAboutProduct, getProductUrl } = useWhatsApp()
+const { addToCart, openCart } = useCart()
 
 const code = route.params.code as string
 
@@ -90,6 +92,26 @@ function shareWhatsApp() {
   const text = `Mira este producto de Agua Dulce: ${product.value?.name} - ${productUrl.value}`
   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
 }
+
+// Add to cart
+const addedToCart = ref(false)
+
+function handleAddToCart() {
+  if (product.value) {
+    addToCart(product.value)
+    addedToCart.value = true
+    setTimeout(() => {
+      addedToCart.value = false
+    }, 2000)
+  }
+}
+
+function handleAddAndOpen() {
+  if (product.value) {
+    addToCart(product.value)
+    openCart()
+  }
+}
 </script>
 
 <template>
@@ -147,14 +169,26 @@ function shareWhatsApp() {
             {{ formatPrice(product?.priceRetail || 0) }}
           </p>
 
-          <!-- WhatsApp CTA -->
-          <button
-            class="mt-8 btn-whatsapp text-lg py-4"
-            @click="askAboutProduct(product!)"
-          >
-            <MessageCircle class="w-6 h-6" />
-            Preguntar por WhatsApp
-          </button>
+          <!-- Add to Cart -->
+          <div class="mt-8 flex flex-col gap-3">
+            <button
+              class="btn-primary text-lg py-4 flex items-center justify-center gap-3"
+              @click="handleAddToCart"
+            >
+              <Check v-if="addedToCart" class="w-6 h-6" />
+              <ShoppingBag v-else class="w-6 h-6" />
+              {{ addedToCart ? 'Añadido al carrito' : 'Añadir al carrito' }}
+            </button>
+
+            <!-- WhatsApp CTA -->
+            <button
+              class="btn-whatsapp text-lg py-4"
+              @click="askAboutProduct(product!)"
+            >
+              <MessageCircle class="w-6 h-6" />
+              Preguntar por WhatsApp
+            </button>
+          </div>
 
           <!-- Share buttons -->
           <div class="mt-8 pt-8 border-t border-cream-200">

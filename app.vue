@@ -1,3 +1,12 @@
+<script setup lang="ts">
+// Inicializar carrito desde localStorage
+const { initCart } = useCart()
+
+onMounted(() => {
+  initCart()
+})
+</script>
+
 <template>
   <div class="min-h-screen flex flex-col">
     <AppHeader />
@@ -10,6 +19,7 @@
 
     <ClientOnly>
       <AppWhatsAppButton />
+      <CartDrawer />
     </ClientOnly>
   </div>
 </template>

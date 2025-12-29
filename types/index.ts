@@ -47,3 +47,69 @@ export function formatPrice(price: number): string {
     currency: 'EUR',
   }).format(price)
 }
+
+// ============================================
+// CART - Carrito de compras
+// ============================================
+
+export interface CartItem {
+  product: Product
+  quantity: number
+}
+
+export interface Cart {
+  items: CartItem[]
+}
+
+// ============================================
+// CHECKOUT - Datos de pedido
+// ============================================
+
+export type PaymentMethod = 'BIZUM' | 'TRANSFER'
+
+export interface ShippingData {
+  name: string
+  phone: string
+  email?: string
+  street: string
+  city: string
+  zip: string
+}
+
+export interface CreateOrderRequest {
+  customerPhone: string
+  customerName: string
+  shippingName: string
+  shippingPhone: string
+  shippingEmail?: string
+  shippingStreet: string
+  shippingCity: string
+  shippingZip: string
+  paymentMethod: PaymentMethod
+  items: { productId: string; quantity: number }[]
+  notes?: string
+}
+
+export interface PaymentInstructions {
+  method: PaymentMethod
+  bizum?: { phone: string; concept: string }
+  transfer?: { iban: string; beneficiary: string; concept: string }
+}
+
+export interface OrderCreatedResponse {
+  trackingCode: string
+  orderNumber: string
+  total: number
+  paymentMethod: PaymentMethod
+  paymentInstructions: PaymentInstructions
+}
+
+export interface OrderStatusResponse {
+  trackingCode: string
+  orderNumber: string
+  status: string
+  statusLabel: string
+  createdAt: string
+  items: { productName: string; quantity: number; unitPrice: number; subtotal: number }[]
+  total: number
+}
