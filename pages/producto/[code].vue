@@ -41,7 +41,7 @@ useSeoMeta({
   ogTitle: () => `${product.value?.name} - Agua Dulce`,
   ogDescription: () => `${product.value?.name}. Joyería artesanal única.`,
   ogImage: () => product.value?.imageUrl || '',
-  ogType: 'product',
+  ogType: 'website',
 })
 
 // Get category label

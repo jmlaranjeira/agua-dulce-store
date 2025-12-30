@@ -33,7 +33,7 @@ onMounted(() => {
     :class="isScrolled ? 'border-cream-200 shadow-soft' : 'border-transparent'"
   >
     <div class="container-app">
-      <div class="flex items-center justify-between h-16 md:h-20">
+      <div class="flex items-center h-16 md:h-20">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center gap-2" @click="closeMenu">
           <span class="font-serif text-2xl md:text-3xl font-semibold text-warm-800 tracking-tight">
@@ -41,20 +41,21 @@ onMounted(() => {
           </span>
         </NuxtLink>
 
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center gap-8">
-          <NuxtLink
-            v-for="link in navLinks"
-            :key="link.href"
-            :to="link.href"
-            class="text-warm-600 hover:text-gold-500 font-medium transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-gold-500 after:transition-all after:duration-300 hover:after:w-full"
-          >
-            {{ link.name }}
-          </NuxtLink>
-        </nav>
+        <!-- Spacer -->
+        <div class="flex-1" />
 
-        <!-- Desktop Cart Button -->
-        <div class="hidden md:block">
+        <!-- Desktop Navigation + Cart -->
+        <div class="hidden md:flex items-center gap-6">
+          <nav class="flex items-center gap-8">
+            <NuxtLink
+              v-for="link in navLinks"
+              :key="link.href"
+              :to="link.href"
+              class="text-warm-600 hover:text-gold-500 font-medium transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-gold-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              {{ link.name }}
+            </NuxtLink>
+          </nav>
           <CartButton />
         </div>
 

@@ -96,12 +96,19 @@ export interface PaymentInstructions {
   transfer?: { iban: string; beneficiary: string; concept: string }
 }
 
+export interface ContactInfo {
+  email: string
+  phone: string
+  whatsapp: string
+}
+
 export interface OrderCreatedResponse {
   trackingCode: string
   orderNumber: string
   total: number
   paymentMethod: PaymentMethod
   paymentInstructions: PaymentInstructions
+  contactInfo: ContactInfo
 }
 
 export interface OrderStatusResponse {
@@ -112,4 +119,7 @@ export interface OrderStatusResponse {
   createdAt: string
   items: { productName: string; quantity: number; unitPrice: number; subtotal: number }[]
   total: number
+  paymentMethod: PaymentMethod | null
+  paymentInstructions: PaymentInstructions | null
+  contactInfo: ContactInfo
 }

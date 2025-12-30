@@ -1,7 +1,5 @@
-import { defineSitemapEventHandler } from '#imports'
-
-export default defineSitemapEventHandler(async () => {
-  const config = useRuntimeConfig()
+export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig(event)
 
   try {
     const products = await $fetch<{ code: string }[]>(
