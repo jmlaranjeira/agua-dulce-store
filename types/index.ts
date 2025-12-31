@@ -13,7 +13,7 @@ export interface ProductFilters {
   sortBy?: 'price_asc' | 'price_desc' | 'newest'
 }
 
-export type ProductCategory = 'earrings' | 'rings' | 'pendants'
+export type ProductCategory = 'earrings' | 'rings' | 'pendants' | 'charms'
 
 /**
  * Deriva la categoría del producto a partir del código
@@ -30,6 +30,8 @@ export function getCategoryFromCode(code: string): ProductCategory | null {
       return 'rings'
     case 'PE':
       return 'pendants'
+    case 'CH':
+      return 'charms'
     default:
       return null
   }
@@ -39,6 +41,7 @@ export const categoryLabels: Record<ProductCategory, string> = {
   earrings: 'Pendientes',
   rings: 'Anillos',
   pendants: 'Colgantes',
+  charms: 'Charms',
 }
 
 export function formatPrice(price: number): string {

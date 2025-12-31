@@ -29,6 +29,7 @@ const categories: { value: ProductCategory | undefined; label: string }[] = [
   { value: 'earrings', label: categoryLabels.earrings },
   { value: 'rings', label: categoryLabels.rings },
   { value: 'pendants', label: categoryLabels.pendants },
+  { value: 'charms', label: categoryLabels.charms },
 ]
 
 // Sort options
