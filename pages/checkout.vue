@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ArrowLeft, CreditCard, Smartphone, Building } from 'lucide-vue-next'
-import { formatPrice } from '~/types'
+import { formatPrice, PAYMENT_METHODS } from '~/types'
 import type { PaymentMethod, CreateOrderRequest } from '~/types'
 
+const config = useRuntimeConfig()
 const router = useRouter()
 const { items, cartTotal, isEmpty, clearCart } = useCart()
 const { createOrder } = useOrders()
+const { createStripeSession } = usePayment()
 
 // Redirect if cart is empty
 if (isEmpty.value) {
@@ -17,6 +19,34 @@ useSeoMeta({
   description: 'Finaliza tu compra en Agua Dulce, joyería artesanal.',
 })
 
+// Available payment methods from API
+const availablePaymentMethods = ref<PaymentMethod[]>([])
+const isLoadingMethods = ref(true)
+
+onMounted(async () => {
+  try {
+    const methods = await $fetch<PaymentMethod[]>(
+      `${config.public.apiUrl}/public/config/payment-methods`,
+    )
+    availablePaymentMethods.value = methods
+    // Set default to first available method
+    if (methods.length > 0) {
+      form.paymentMethod = methods[0]
+    }
+  } catch {
+    // Fallback to manual methods if API fails
+    availablePaymentMethods.value = [PAYMENT_METHODS.BIZUM, PAYMENT_METHODS.TRANSFER]
+    form.paymentMethod = PAYMENT_METHODS.BIZUM
+  } finally {
+    isLoadingMethods.value = false
+  }
+})
+
+// Check if a method is available
+function isMethodAvailable(method: PaymentMethod): boolean {
+  return availablePaymentMethods.value.includes(method)
+}
+
 // Form state
 const form = reactive({
   name: '',
@@ -26,7 +56,7 @@ const form = reactive({
   city: '',
   zip: '',
   notes: '',
-  paymentMethod: 'BIZUM' as PaymentMethod,
+  paymentMethod: PAYMENT_METHODS.BIZUM as PaymentMethod,
 })
 
 const errors = reactive<Record<string, string>>({})
@@ -94,11 +124,17 @@ async function submitOrder() {
       notes: form.notes || undefined,
     }
 
-    const result = await createOrder(orderData)
-
-    // Clear cart and redirect to confirmation
-    clearCart()
-    router.push(`/pedido/${result.trackingCode}`)
+    if (form.paymentMethod === PAYMENT_METHODS.CARD) {
+      // Flujo Stripe: crear sesión y redirigir
+      const { sessionUrl } = await createStripeSession(orderData)
+      clearCart()
+      window.location.href = sessionUrl
+    } else {
+      // Flujo manual (Bizum/Transferencia)
+      const result = await createOrder(orderData)
+      clearCart()
+      router.push(`/pedido/${result.trackingCode}`)
+    }
   } catch (err) {
     submitError.value =
       err instanceof Error
@@ -259,12 +295,18 @@ async function submitOrder() {
               Método de pago
             </h2>
 
-            <div class="space-y-3">
-              <!-- Bizum -->
+            <!-- Loading state -->
+            <div v-if="isLoadingMethods" class="py-4 text-center text-warm-500">
+              Cargando métodos de pago...
+            </div>
+
+            <div v-else class="space-y-3">
+              <!-- Card (Stripe) -->
               <label
+                v-if="isMethodAvailable(PAYMENT_METHODS.CARD)"
                 class="flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all"
                 :class="
-                  form.paymentMethod === 'BIZUM'
+                  form.paymentMethod === PAYMENT_METHODS.CARD
                     ? 'border-gold-500 bg-gold-50'
                     : 'border-cream-200 hover:border-cream-300'
                 "
@@ -272,13 +314,51 @@ async function submitOrder() {
                 <input
                   v-model="form.paymentMethod"
                   type="radio"
-                  value="BIZUM"
+                  :value="PAYMENT_METHODS.CARD"
                   class="sr-only"
                 />
                 <div
                   class="w-12 h-12 rounded-full flex items-center justify-center"
                   :class="
-                    form.paymentMethod === 'BIZUM'
+                    form.paymentMethod === PAYMENT_METHODS.CARD
+                      ? 'bg-gold-500 text-white'
+                      : 'bg-cream-100 text-warm-500'
+                  "
+                >
+                  <CreditCard class="w-6 h-6" />
+                </div>
+                <div class="flex-1">
+                  <p class="font-medium text-warm-800">Tarjeta de crédito/débito</p>
+                  <p class="text-sm text-warm-500">
+                    Pago seguro con Visa o Mastercard
+                  </p>
+                </div>
+                <div class="flex gap-1">
+                  <img src="/icons/visa.svg" alt="Visa" class="h-6 w-auto" />
+                  <img src="/icons/mastercard.svg" alt="Mastercard" class="h-6 w-auto" />
+                </div>
+              </label>
+
+              <!-- Bizum -->
+              <label
+                v-if="isMethodAvailable(PAYMENT_METHODS.BIZUM)"
+                class="flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all"
+                :class="
+                  form.paymentMethod === PAYMENT_METHODS.BIZUM
+                    ? 'border-gold-500 bg-gold-50'
+                    : 'border-cream-200 hover:border-cream-300'
+                "
+              >
+                <input
+                  v-model="form.paymentMethod"
+                  type="radio"
+                  :value="PAYMENT_METHODS.BIZUM"
+                  class="sr-only"
+                />
+                <div
+                  class="w-12 h-12 rounded-full flex items-center justify-center"
+                  :class="
+                    form.paymentMethod === PAYMENT_METHODS.BIZUM
                       ? 'bg-gold-500 text-white'
                       : 'bg-cream-100 text-warm-500'
                   "
@@ -295,9 +375,10 @@ async function submitOrder() {
 
               <!-- Transfer -->
               <label
+                v-if="isMethodAvailable(PAYMENT_METHODS.TRANSFER)"
                 class="flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all"
                 :class="
-                  form.paymentMethod === 'TRANSFER'
+                  form.paymentMethod === PAYMENT_METHODS.TRANSFER
                     ? 'border-gold-500 bg-gold-50'
                     : 'border-cream-200 hover:border-cream-300'
                 "
@@ -305,13 +386,13 @@ async function submitOrder() {
                 <input
                   v-model="form.paymentMethod"
                   type="radio"
-                  value="TRANSFER"
+                  :value="PAYMENT_METHODS.TRANSFER"
                   class="sr-only"
                 />
                 <div
                   class="w-12 h-12 rounded-full flex items-center justify-center"
                   :class="
-                    form.paymentMethod === 'TRANSFER'
+                    form.paymentMethod === PAYMENT_METHODS.TRANSFER
                       ? 'bg-gold-500 text-white'
                       : 'bg-cream-100 text-warm-500'
                   "
@@ -327,8 +408,13 @@ async function submitOrder() {
               </label>
             </div>
 
-            <p class="text-sm text-warm-500 mt-4">
-              Recibirás las instrucciones de pago una vez confirmes el pedido.
+            <p v-if="!isLoadingMethods" class="text-sm text-warm-500 mt-4">
+              <template v-if="form.paymentMethod === PAYMENT_METHODS.CARD">
+                Serás redirigido a una página segura para completar el pago.
+              </template>
+              <template v-else>
+                Recibirás las instrucciones de pago una vez confirmes el pedido.
+              </template>
             </p>
           </div>
         </div>
@@ -391,7 +477,14 @@ async function submitOrder() {
             </button>
 
             <p class="text-xs text-warm-500 mt-4 text-center">
-              Al confirmar, aceptas nuestras condiciones de venta
+              Al confirmar, aceptas nuestras
+              <NuxtLink to="/legal/condiciones" class="underline hover:text-gold-600">
+                condiciones de venta
+              </NuxtLink>
+              y nuestra
+              <NuxtLink to="/legal/privacidad" class="underline hover:text-gold-600">
+                política de privacidad
+              </NuxtLink>.
             </p>
           </div>
         </div>

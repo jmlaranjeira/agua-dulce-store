@@ -20,6 +20,7 @@ onMounted(() => {
     <ClientOnly>
       <AppWhatsAppButton />
       <CartDrawer />
+      <AppCookieBanner />
     </ClientOnly>
   </div>
 </template>

@@ -68,7 +68,13 @@ export interface Cart {
 // CHECKOUT - Datos de pedido
 // ============================================
 
-export type PaymentMethod = 'BIZUM' | 'TRANSFER'
+export type PaymentMethod = 'BIZUM' | 'TRANSFER' | 'CARD'
+
+export const PAYMENT_METHODS = {
+  BIZUM: 'BIZUM',
+  TRANSFER: 'TRANSFER',
+  CARD: 'CARD',
+} as const
 
 export interface ShippingData {
   name: string
@@ -110,8 +116,18 @@ export interface OrderCreatedResponse {
   orderNumber: string
   total: number
   paymentMethod: PaymentMethod
-  paymentInstructions: PaymentInstructions
+  paymentInstructions: PaymentInstructions | null
   contactInfo: ContactInfo
+}
+
+// ============================================
+// STRIPE - Pagos con tarjeta
+// ============================================
+
+export interface StripeSessionResponse {
+  sessionUrl: string
+  trackingCode: string
+  orderNumber: string
 }
 
 export interface OrderStatusResponse {

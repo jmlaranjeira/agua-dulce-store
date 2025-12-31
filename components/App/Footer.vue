@@ -7,7 +7,7 @@ const currentYear = new Date().getFullYear()
 <template>
   <footer class="bg-warm-800 text-cream-200">
     <div class="container-app py-12 md:py-16">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         <!-- Brand -->
         <div>
           <h3 class="font-serif text-2xl font-semibold text-white mb-4">
@@ -59,6 +59,33 @@ const currentYear = new Date().getFullYear()
               class="text-cream-300 hover:text-gold-400 text-sm transition-colors duration-300"
             >
               Catálogo
+            </NuxtLink>
+          </nav>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">
+            Legal
+          </h4>
+          <nav class="flex flex-col gap-3">
+            <NuxtLink
+              to="/legal/privacidad"
+              class="text-cream-300 hover:text-gold-400 text-sm transition-colors duration-300"
+            >
+              Política de privacidad
+            </NuxtLink>
+            <NuxtLink
+              to="/legal/condiciones"
+              class="text-cream-300 hover:text-gold-400 text-sm transition-colors duration-300"
+            >
+              Condiciones de venta
+            </NuxtLink>
+            <NuxtLink
+              to="/legal/cookies"
+              class="text-cream-300 hover:text-gold-400 text-sm transition-colors duration-300"
+            >
+              Política de cookies
             </NuxtLink>
           </nav>
         </div>
