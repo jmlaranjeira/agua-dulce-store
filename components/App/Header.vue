@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Menu, X } from 'lucide-vue-next'
 
+defineProps<{
+  demoMode?: boolean
+}>()
+
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 
@@ -29,8 +33,11 @@ onMounted(() => {
 
 <template>
   <header
-    class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b transition-all duration-300"
-    :class="isScrolled ? 'border-cream-200 shadow-soft' : 'border-transparent'"
+    class="sticky z-40 bg-white/95 backdrop-blur-sm border-b transition-all duration-300"
+    :class="[
+      isScrolled ? 'border-cream-200 shadow-soft' : 'border-transparent',
+      demoMode ? 'top-10' : 'top-0'
+    ]"
   >
     <div class="container-app">
       <div class="flex items-center h-16 md:h-20">

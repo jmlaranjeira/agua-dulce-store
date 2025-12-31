@@ -26,6 +26,7 @@ export default defineNuxtConfig({
       apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:3006',
       whatsappPhone: process.env.NUXT_PUBLIC_WHATSAPP_PHONE || '34666666666',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3009',
+      demoMode: process.env.NUXT_PUBLIC_DEMO_MODE === 'true',
     },
   },
 

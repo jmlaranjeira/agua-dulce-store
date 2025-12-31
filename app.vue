@@ -1,6 +1,8 @@
 <script setup lang="ts">
 // Inicializar carrito desde localStorage
 const { initCart } = useCart()
+const config = useRuntimeConfig()
+const demoMode = computed(() => config.public.demoMode)
 
 onMounted(() => {
   initCart()
@@ -9,7 +11,8 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <AppHeader />
+    <AppDemoBanner />
+    <AppHeader :demo-mode="demoMode" />
 
     <main class="flex-1">
       <NuxtPage />
