@@ -300,17 +300,33 @@ const whatsappLink = computed(() => {
               <div
                 v-for="(item, index) in order?.items"
                 :key="index"
-                class="flex justify-between py-3 border-b border-cream-200 last:border-0"
+                class="flex items-center gap-4 py-3 border-b border-cream-200 last:border-0"
               >
-                <div>
-                  <p class="font-medium text-warm-800">
+                <div
+                  v-if="item.productImage"
+                  class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-cream-100"
+                >
+                  <img
+                    :src="item.productImage"
+                    :alt="item.productName"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div
+                  v-else
+                  class="w-16 h-16 rounded-lg bg-cream-100 flex items-center justify-center flex-shrink-0"
+                >
+                  <Package class="w-6 h-6 text-warm-300" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-medium text-warm-800 truncate">
                     {{ item.productName }}
                   </p>
                   <p class="text-sm text-warm-500">
                     {{ item.quantity }} × {{ formatPrice(item.unitPrice) }}
                   </p>
                 </div>
-                <span class="font-semibold text-warm-800">
+                <span class="font-semibold text-warm-800 flex-shrink-0">
                   {{ formatPrice(item.subtotal) }}
                 </span>
               </div>

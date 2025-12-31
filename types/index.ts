@@ -130,13 +130,21 @@ export interface StripeSessionResponse {
   orderNumber: string
 }
 
+export interface OrderItemSummary {
+  productName: string
+  productImage: string | null
+  quantity: number
+  unitPrice: number
+  subtotal: number
+}
+
 export interface OrderStatusResponse {
   trackingCode: string
   orderNumber: string
   status: string
   statusLabel: string
   createdAt: string
-  items: { productName: string; quantity: number; unitPrice: number; subtotal: number }[]
+  items: OrderItemSummary[]
   total: number
   paymentMethod: PaymentMethod | null
   paymentInstructions: PaymentInstructions | null
