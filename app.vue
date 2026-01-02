@@ -10,7 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col overflow-x-hidden">
     <AppDemoBanner />
     <AppHeader :demo-mode="demoMode" />
 
