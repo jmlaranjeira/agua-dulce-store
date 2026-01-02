@@ -181,8 +181,15 @@ export interface DeliveryInfo {
 }
 
 export interface ShippingWarning {
-  type: 'customs' | 'unknown_zone' | 'international_supplier'
+  type: 'customs' | 'unknown_zone' | 'international_supplier' | 'out_of_stock'
   message: string
+}
+
+export interface OutOfStockProduct {
+  productId: string
+  name: string
+  supplierDeliveryMin: number | null
+  supplierDeliveryMax: number | null
 }
 
 export interface ShippingCalculation {
@@ -190,4 +197,5 @@ export interface ShippingCalculation {
   shipping: ShippingPriceInfo
   delivery: DeliveryInfo
   warnings: ShippingWarning[]
+  outOfStockProducts: OutOfStockProduct[]
 }

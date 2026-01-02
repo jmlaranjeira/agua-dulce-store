@@ -89,7 +89,9 @@ async function onZipChange() {
   shippingError.value = ''
 
   try {
-    shippingInfo.value = await calculateShipping(zip, cartTotal.value)
+    // Extraer productIds del carrito para verificar stock
+    const productIds = items.value.map((item) => item.product.id)
+    shippingInfo.value = await calculateShipping(zip, cartTotal.value, productIds)
   } catch (err) {
     shippingError.value = 'Error al calcular el envío'
     shippingInfo.value = null
@@ -531,9 +533,9 @@ async function submitOrder() {
                 📦 {{ shippingInfo.delivery.message }}
               </div>
 
-              <!-- Avisos (aduanas, etc) -->
+              <!-- Avisos (aduanas, internacional, etc) - no mostrar out_of_stock al cliente -->
               <div
-                v-for="warning in shippingInfo?.warnings"
+                v-for="warning in shippingInfo?.warnings?.filter(w => w.type !== 'out_of_stock')"
                 :key="warning.type"
                 class="text-sm text-amber-600 bg-amber-50 p-2 rounded"
               >

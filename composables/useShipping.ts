@@ -6,19 +6,25 @@ export function useShipping() {
 
   /**
    * Calculate shipping for a postal code and subtotal
+   * Optionally accepts productIds to check stock and adjust delivery times
    */
   async function calculateShipping(
     postalCode: string,
     subtotal: number,
+    productIds?: string[],
   ): Promise<ShippingCalculation> {
+    const params: Record<string, string> = {
+      zip: postalCode,
+      subtotal: subtotal.toString(),
+    }
+
+    if (productIds && productIds.length > 0) {
+      params.productIds = productIds.join(',')
+    }
+
     return await $fetch<ShippingCalculation>(
       `${apiUrl}/public/shipping/calculate`,
-      {
-        params: {
-          zip: postalCode,
-          subtotal: subtotal.toString(),
-        },
-      },
+      { params },
     )
   }
 
