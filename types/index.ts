@@ -145,8 +145,49 @@ export interface OrderStatusResponse {
   statusLabel: string
   createdAt: string
   items: OrderItemSummary[]
+  subtotal: number
+  shippingPrice: number
+  shippingWasFree: boolean
+  shippingZoneName: string | null
+  estimatedDaysMin: number | null
+  estimatedDaysMax: number | null
+  hasCustomsRisk: boolean
   total: number
   paymentMethod: PaymentMethod | null
   paymentInstructions: PaymentInstructions | null
   contactInfo: ContactInfo
+}
+
+// ============================================
+// SHIPPING - Envíos
+// ============================================
+
+export interface ShippingZoneInfo {
+  code: string
+  name: string
+}
+
+export interface ShippingPriceInfo {
+  price: number | null
+  isFree: boolean
+  freeAbove: number | null
+  amountUntilFree: number | null
+}
+
+export interface DeliveryInfo {
+  minDays: number | null
+  maxDays: number | null
+  message: string
+}
+
+export interface ShippingWarning {
+  type: 'customs' | 'unknown_zone' | 'international_supplier'
+  message: string
+}
+
+export interface ShippingCalculation {
+  zone: ShippingZoneInfo | null
+  shipping: ShippingPriceInfo
+  delivery: DeliveryInfo
+  warnings: ShippingWarning[]
 }

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ArrowLeft, CreditCard, Smartphone, Building } from 'lucide-vue-next'
 import { formatPrice, PAYMENT_METHODS } from '~/types'
-import type { PaymentMethod, CreateOrderRequest } from '~/types'
+import type { PaymentMethod, CreateOrderRequest, ShippingCalculation } from '~/types'
 
 const config = useRuntimeConfig()
 const router = useRouter()
 const { items, cartTotal, isEmpty, clearCart } = useCart()
 const { createOrder } = useOrders()
 const { createStripeSession } = usePayment()
+const { calculateShipping } = useShipping()
 
 // Redirect if cart is empty
 if (isEmpty.value) {
@@ -63,6 +64,49 @@ const errors = reactive<Record<string, string>>({})
 const isSubmitting = ref(false)
 const submitError = ref('')
 
+// Shipping state
+const shippingInfo = ref<ShippingCalculation | null>(null)
+const shippingLoading = ref(false)
+const shippingError = ref('')
+
+// Total con envío
+const orderTotal = computed(() => {
+  if (!shippingInfo.value?.shipping.price) return cartTotal.value
+  if (shippingInfo.value.shipping.isFree) return cartTotal.value
+  return cartTotal.value + shippingInfo.value.shipping.price
+})
+
+// Calcular envío cuando cambia el CP
+async function onZipChange() {
+  const zip = form.zip.trim()
+  // Validar formato: España (5 dígitos) o Portugal (4 o 4-3)
+  if (!/^(\d{5}|\d{4}(-\d{3})?)$/.test(zip)) {
+    shippingInfo.value = null
+    return
+  }
+
+  shippingLoading.value = true
+  shippingError.value = ''
+
+  try {
+    shippingInfo.value = await calculateShipping(zip, cartTotal.value)
+  } catch (err) {
+    shippingError.value = 'Error al calcular el envío'
+    shippingInfo.value = null
+  } finally {
+    shippingLoading.value = false
+  }
+}
+
+// Debounce para no llamar en cada tecla
+let zipTimeout: ReturnType<typeof setTimeout> | null = null
+function onZipInput() {
+  if (zipTimeout) clearTimeout(zipTimeout)
+  zipTimeout = setTimeout(() => {
+    onZipChange()
+  }, 500)
+}
+
 // Validate form
 function validate(): boolean {
   // Clear previous errors
@@ -92,8 +136,8 @@ function validate(): boolean {
 
   if (!form.zip.trim()) {
     errors.zip = 'El código postal es obligatorio'
-  } else if (!/^\d{5}$/.test(form.zip)) {
-    errors.zip = 'Introduce un código postal válido (5 dígitos)'
+  } else if (!/^(\d{5}|\d{4}(-\d{3})?)$/.test(form.zip.trim())) {
+    errors.zip = 'Código postal inválido'
   }
 
   return Object.keys(errors).length === 0
@@ -268,7 +312,9 @@ async function submitOrder() {
                   class="input-field"
                   :class="{ 'border-red-500': errors.zip }"
                   placeholder="28001"
-                  maxlength="5"
+                  maxlength="8"
+                  @input="onZipInput"
+                  @blur="onZipChange"
                 />
                 <p v-if="errors.zip" class="text-red-500 text-sm mt-1">
                   {{ errors.zip }}
@@ -449,16 +495,56 @@ async function submitOrder() {
                 <span>Subtotal</span>
                 <span>{{ formatPrice(cartTotal) }}</span>
               </div>
+
+              <!-- Envío -->
               <div class="flex justify-between text-warm-600">
                 <span>Envío</span>
-                <span class="text-sm">A calcular</span>
+                <template v-if="shippingLoading">
+                  <span class="text-sm text-warm-400">Calculando...</span>
+                </template>
+                <template v-else-if="shippingInfo">
+                  <span v-if="shippingInfo.shipping.isFree" class="text-green-600 font-medium">
+                    Gratis
+                  </span>
+                  <span v-else-if="shippingInfo.shipping.price !== null">
+                    {{ formatPrice(shippingInfo.shipping.price) }}
+                  </span>
+                  <span v-else class="text-warm-500">
+                    Consultar
+                  </span>
+                </template>
+                <template v-else>
+                  <span class="text-sm text-warm-400">Introduce CP</span>
+                </template>
+              </div>
+
+              <!-- Mensaje envío gratis -->
+              <div
+                v-if="shippingInfo?.shipping.amountUntilFree && !shippingInfo.shipping.isFree"
+                class="text-sm text-green-600 bg-green-50 p-2 rounded"
+              >
+                Añade {{ formatPrice(shippingInfo.shipping.amountUntilFree) }} más para envío gratis
+              </div>
+
+              <!-- Tiempo estimado -->
+              <div v-if="shippingInfo?.delivery.message" class="text-sm text-warm-500">
+                📦 {{ shippingInfo.delivery.message }}
+              </div>
+
+              <!-- Avisos (aduanas, etc) -->
+              <div
+                v-for="warning in shippingInfo?.warnings"
+                :key="warning.type"
+                class="text-sm text-amber-600 bg-amber-50 p-2 rounded"
+              >
+                ⚠️ {{ warning.message }}
               </div>
             </div>
 
             <div class="flex justify-between items-center py-4">
               <span class="text-lg font-semibold text-warm-800">Total</span>
               <span class="text-2xl font-bold text-gold-600">
-                {{ formatPrice(cartTotal) }}
+                {{ formatPrice(orderTotal) }}
               </span>
             </div>
 
