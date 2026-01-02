@@ -533,9 +533,9 @@ async function submitOrder() {
                 📦 {{ shippingInfo.delivery.message }}
               </div>
 
-              <!-- Avisos (aduanas, internacional, etc) - no mostrar out_of_stock al cliente -->
+              <!-- Avisos (solo aduanas) - no mostrar info interna al cliente -->
               <div
-                v-for="warning in shippingInfo?.warnings?.filter(w => w.type !== 'out_of_stock')"
+                v-for="warning in shippingInfo?.warnings?.filter(w => w.type === 'customs' || w.type === 'unknown_zone')"
                 :key="warning.type"
                 class="text-sm text-amber-600 bg-amber-50 p-2 rounded"
               >
