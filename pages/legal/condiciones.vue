@@ -101,28 +101,48 @@ useSeoMeta({
           </section>
 
           <section class="mb-8">
-            <h2 class="text-xl font-semibold text-warm-800 mb-4">8. Derecho de desistimiento</h2>
+            <h2 class="text-xl font-semibold text-warm-800 mb-4">8. Derecho de desistimiento y devoluciones</h2>
             <p class="text-warm-600 mb-4">
-              De conformidad con la legislación vigente, dispone de un plazo de <strong>14 días naturales</strong>
-              desde la recepción del producto para ejercer su derecho de desistimiento sin necesidad de justificación.
+              De conformidad con la legislación vigente (Real Decreto Legislativo 1/2007), dispone de un plazo de
+              <strong>14 días naturales</strong> desde la recepción del producto para ejercer su derecho de
+              desistimiento sin necesidad de justificación.
             </p>
-            <p class="text-warm-600 mb-4">
-              Para ejercer este derecho, debe comunicárnoslo por escrito a [EMAIL DE CONTACTO] indicando:
-            </p>
+
+            <h3 class="text-lg font-medium text-warm-700 mt-6 mb-3">Proceso de devolución:</h3>
+            <ol class="list-decimal list-inside text-warm-600 space-y-2">
+              <li>Solicite la devolución por email a [EMAIL DE CONTACTO] indicando su número de pedido y el/los producto(s) a devolver</li>
+              <li>Le proporcionaremos instrucciones y la dirección de envío</li>
+              <li>Envíe el producto a su cargo en un plazo máximo de 14 días desde su solicitud</li>
+              <li>Una vez recibido, verificaremos el estado del producto</li>
+              <li>Procesaremos el reembolso en un máximo de 14 días desde la recepción</li>
+            </ol>
+
+            <h3 class="text-lg font-medium text-warm-700 mt-6 mb-3">Condiciones para aceptar la devolución:</h3>
             <ul class="list-disc list-inside text-warm-600 space-y-2">
-              <li>Número de pedido</li>
-              <li>Producto(s) a devolver</li>
-              <li>Motivo (opcional)</li>
+              <li>El producto debe estar <strong>sin usar y sin signos de uso</strong></li>
+              <li>Debe conservarse en su <strong>embalaje original</strong></li>
+              <li>Debe incluir <strong>todos los elementos entregados</strong> (estuche, bolsa, etiquetas, certificado de autenticidad si lo hubiera)</li>
+              <li>Los gastos de envío de la devolución corren a cargo del cliente (Art. 108 RDL 1/2007)</li>
             </ul>
+
             <p class="text-warm-600 mt-4">
-              <strong>Condiciones para la devolución:</strong>
+              <strong>Nota:</strong> El reembolso se realizará utilizando el mismo método de pago empleado en la compra original.
+            </p>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-warm-800 mb-4">8.1. Excepciones al derecho de desistimiento</h2>
+            <p class="text-warm-600 mb-4">
+              Conforme al artículo 103 del Real Decreto Legislativo 1/2007, el derecho de desistimiento
+              <strong>no será aplicable</strong> en los siguientes casos:
             </p>
             <ul class="list-disc list-inside text-warm-600 space-y-2">
-              <li>El producto debe estar en su estado original, sin usar</li>
-              <li>Debe conservar el embalaje original</li>
-              <li>Los gastos de devolución corren a cargo del cliente</li>
-              <li>El reembolso se realizará en un plazo máximo de 14 días desde la recepción del producto</li>
+              <li><strong>Productos personalizados o grabados:</strong> joyas con grabado de nombres, fechas, iniciales o textos personalizados a petición del cliente</li>
+              <li><strong>Productos confeccionados a medida:</strong> artículos fabricados según especificaciones particulares del cliente (ej: anillos o pulseras ajustados a medidas específicas bajo pedido)</li>
             </ul>
+            <p class="text-warm-500 text-sm mt-4">
+              <em>Si en el momento de su compra el producto incluye personalización, se le informará expresamente antes de confirmar el pedido.</em>
+            </p>
           </section>
 
           <section class="mb-8">
