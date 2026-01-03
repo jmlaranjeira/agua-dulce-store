@@ -1,3 +1,4 @@
+import { ref, computed } from 'vue'
 import type { Product, CartItem } from '~/types'
 
 const CART_STORAGE_KEY = 'agua-dulce-cart'
